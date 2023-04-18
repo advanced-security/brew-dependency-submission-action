@@ -31,7 +31,7 @@ jobs:
         GITHUB_TOKEN: ${{ github.token }}
       run: |
         PYTHONPATH=$PWD:$PWD/vendor
-        pipenv run python3 -m myaction
+        pipenv run python3 -m bldsa
 
   action-test:
     runs-on: ubuntu-latest

@@ -111,7 +111,7 @@ if __name__ == "__main__":
             sha=arguments.sha,
             ref=arguments.ref
         ) 
-        print(json.dumps(bom, indent=2))
+        # print(json.dumps(bom, indent=2))
 
         octokit.submitDependencies(bom)
 

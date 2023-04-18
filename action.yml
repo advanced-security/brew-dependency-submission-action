@@ -2,6 +2,9 @@ name: 'brew-dependency-submission-action'
 description: 'Brew Lockfile Dependency Submission Action'
 
 inputs:
+  brew-lock:
+    description: "Brew Lockfile location"
+
   repository:
     description: Repository Owner and Repository Name
     default: ${{ github.repository }}
@@ -25,6 +28,7 @@ runs:
       run: |
         export PYTHONPATH=${{ github.action_path }}:${{ github.action_path }}/vendor
         python3 -m bldsa \
+          --brewlock "${{ inputs.brew-lock }}" \
           --github-token "${{ inputs.token }}" \
           --github-repository "${{ inputs.repository }}" \
           ${{ inputs.argvs }}

@@ -8,7 +8,7 @@ Brew Lockfile Dependency Submission Action
 - name: Brew Lockfile Dependency Submission Action
   uses: advanced-security/brew-dependency-submission-action@main
   with:
-    # [optonal] The path to the gradle.lock file. Defaults to finding all gradle*.lock in the current
+    # [optonal] The path to the Brewfile.lock.json file. Defaults to finding all Brewfile.lock.json in the current
     # working directory
     brew-lock: "./Brewfile.lock.json"
     # [optional ] Token used to authenticate with the GitHub API. Defaults to the GITHUB_TOKEN secret.

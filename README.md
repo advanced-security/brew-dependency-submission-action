@@ -6,7 +6,7 @@ Brew Lockfile Dependency Submission Action
 
 ```yaml
 - name: Brew Lockfile Dependency Submission Action
-  uses: GeekMasher/brew-dependency-submission-action@main
+  uses: advanced-security/brew-dependency-submission-action@main
   with:
     # [optonal] The path to the gradle.lock file. Defaults to finding all gradle*.lock in the current
     # working directory
@@ -35,7 +35,26 @@ jobs:
       # ... generate Brew lockfile
 
       - name: Brew Lockfile Dependency Submission Action
-        uses: GeekMasher/brew-dependency-submission-action@main
+        uses: advanced-security/brew-dependency-submission-action@main
 ```
 
+
+## License 
+
+This project is licensed under the terms of the MIT open source license. Please refer to [MIT](./LICENSE) for the full terms.
+
+
+## Maintainers 
+
+Maintained by [@GeekMasher](https://github.com/GeekMasher).
+
+
+## Support
+
+Please [create GitHub issues](https://github.com/advanced-security/brew-dependency-submission-action) for any feature requests, bugs, or documentation problems.
+
+
+## Acknowledgement
+
+- @GeekMasher: Author and Maintainer
 

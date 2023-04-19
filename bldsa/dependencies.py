@@ -3,7 +3,7 @@ import os
 import logging
 from datetime import datetime
 
-from bldsa import __name__, __version__, __url__
+from bldsa import __title__, __version__, __url__
 
 logger = logging.getLogger(__name__)
 
@@ -51,12 +51,12 @@ def exportDependencies(source: str, dependencies: list[Dependency], **kwargs) ->
         "version": 0,
         "sha": kwargs.get("sha"),
         "ref": kwargs.get("ref"),
-        "job": {"correlator": __name__, "id": __name__},
-        "detector": {"name": __name__, "version": __version__, "url": __url__},
+        "job": {"correlator": __title__, "id": __title__},
+        "detector": {"name": __title__, "version": __version__, "url": __url__},
         "scanned": datetime.now().isoformat(),
         "manifests": {
-            __name__: {
-                "name": __name__,
+            __title__: {
+                "name": __title__,
                 "file": {
                     "source_location": source,
                 },

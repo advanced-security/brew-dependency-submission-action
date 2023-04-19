@@ -1,6 +1,6 @@
 # brew-dependency-submission-action
 
-Brew Lockfile Dependency Submission Action
+Brew / Homebrew Dependency Submission Action
 
 ## Usage
 

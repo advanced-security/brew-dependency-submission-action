@@ -2,7 +2,7 @@ import os
 import json
 import argparse
 
-from bldsa.dependencies import Dependency, exportDependencies 
+from bldsa.dependencies import Dependency, exportDependencies
 from bldsa.octokit import Octokit
 
 
@@ -35,7 +35,7 @@ parser_github.add_argument(
 
 
 def findBrewFiles(path: str) -> list[str]:
-    """ Find all the Brewfiles """
+    """Find all the Brewfiles"""
     results = []
     for root, _, files in os.walk(path):
         for file in files:
@@ -45,7 +45,7 @@ def findBrewFiles(path: str) -> list[str]:
 
 
 def parseBrewLock(path: str) -> list[Dependency]:
-    """ Parse Brewlock files 
+    """Parse Brewlock files
 
     https://github.com/package-url/purl-spec/blob/master/PURL-TYPES.rst#other-candidate-types-to-define
     """
@@ -66,7 +66,7 @@ def parseBrewLock(path: str) -> list[Dependency]:
             dep_name, _ = dep_name.split("@", 1)
         dep_name = dep_name.replace("github/bootstrap/", "")
         dep_name = dep_name.replace("github/packages/", "")
-        
+
         results.append(
             Dependency(
                 manager="brew",
@@ -86,7 +86,6 @@ def parseBrewLock(path: str) -> list[Dependency]:
     return results
 
 
-
 if __name__ == "__main__":
     arguments = parser.parse_args()
 
@@ -99,19 +98,15 @@ if __name__ == "__main__":
         lock_files.append(arguments.brewlock)
     else:
         lock_files = findBrewFiles(".")
-   
+
     for lockfile in lock_files:
         print(f"Lockfile found :: {lockfile}")
-        
+
         dependencies = parseBrewLock(lockfile)
 
         bom = exportDependencies(
-            lockfile,
-            dependencies,
-            sha=arguments.sha,
-            ref=arguments.ref
-        ) 
+            lockfile, dependencies, sha=arguments.sha, ref=arguments.ref
+        )
         # print(json.dumps(bom, indent=2))
 
         octokit.submitDependencies(bom)
-

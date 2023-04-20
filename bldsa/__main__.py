@@ -13,6 +13,7 @@ logger = logging.getLogger(name)
 parser = argparse.ArgumentParser(name)
 
 parser.add_argument("--debug", action="store_true", help="Debug mode")
+parser.add_argument("--dry-run", action="store_true", help="Dry run mode")
 parser.add_argument("-i", "--brewlock", help="Brewlock file location")
 
 parser.add_argument("-sha", default=os.environ.get("GITHUB_SHA"), help="Commit SHA")
@@ -84,7 +85,10 @@ if __name__ == "__main__":
         )
         logger.info("Generated BOM...")
 
-        octokit.submitDependencies(bom)
-        logger.info("Submitted BOM!")
+        if not arguments.dry_run:
+            octokit.submitDependencies(bom)
+            logger.info("Submitted BOM!")
+        else:
+            logger.info("Dry run mode, skipping submission")
 
     logger.info("Done")

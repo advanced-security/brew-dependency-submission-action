@@ -29,3 +29,6 @@ class Octokit:
             raise Exception(
                 f"Failed to submit dependencies: {resp.status_code} {resp.text}"
             )
+    
+    def __str__(self) -> str:
+        return f"Octokit :: [{self.url}]/{self.owner}/{self.repo}"

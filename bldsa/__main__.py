@@ -1,13 +1,17 @@
 import os
 import json
+import logging
 import argparse
 
+from bldsa import __name__ as name
 from bldsa.dependencies import Dependency, exportDependencies
 from bldsa.octokit import Octokit
 
 
-parser = argparse.ArgumentParser(__name__)
+logger = logging.getLogger(name)
+parser = argparse.ArgumentParser(name)
 
+parser.add_argument("--debug", action="store_true", help="Debug mode")
 parser.add_argument("-i", "--brewlock", help="Brewlock file location")
 
 parser.add_argument("-sha", default=os.environ.get("GITHUB_SHA"), help="Commit SHA")
@@ -89,10 +93,16 @@ def parseBrewLock(path: str) -> list[Dependency]:
 if __name__ == "__main__":
     arguments = parser.parse_args()
 
+    logging.basicConfig(
+        level=logging.DEBUG if arguments.debug or os.environ.get("DEBUG") else logging.INFO,
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    )
+
     lock_files = []
 
     owner, repo = arguments.github_repository.split("/", 1)
     octokit = Octokit(owner, repo, arguments.github_token)
+    logger.info(f"Octokit :: {octokit}")
 
     if arguments.brewlock:
         lock_files.append(arguments.brewlock)
@@ -100,13 +110,17 @@ if __name__ == "__main__":
         lock_files = findBrewFiles(".")
 
     for lockfile in lock_files:
-        print(f"Lockfile found :: {lockfile}")
+        logger.info(f"Lockfile found :: {lockfile}")
 
         dependencies = parseBrewLock(lockfile)
+        logger.debug(f"Dependencies Count :: {len(dependencies)}")
 
         bom = exportDependencies(
             lockfile, dependencies, sha=arguments.sha, ref=arguments.ref
         )
-        # print(json.dumps(bom, indent=2))
+        logger.info("Generated BOM...")
 
         octokit.submitDependencies(bom)
+        logger.info("Submitted BOM!")
+
+    logger.info("Done")

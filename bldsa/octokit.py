@@ -1,10 +1,9 @@
 from typing import *
-
+import os
 import requests
 
-
 class Octokit:
-    def __init__(self, owner: str, repo: str, token: str, url="https://api.github.com"):
+    def __init__(self, owner: str, repo: str, token: str, url=os.environ.get("GITHUB_API_URL")):
         self.owner = owner
         self.repo = repo
         self.token = token

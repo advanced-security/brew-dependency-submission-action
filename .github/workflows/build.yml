@@ -1,4 +1,4 @@
-name: Python Application
+name: Python Action Build & Tests
 
 on:
   push:

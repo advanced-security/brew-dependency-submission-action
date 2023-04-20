@@ -32,7 +32,7 @@ def parseBrewJson(data: dict) -> list[Dependency]:
     brew_os = "macos" if brew_sys.get("macos") else "deb"
 
     for dep_name, dep_data in data.get("entries", {}).get("brew", {}).items():
-        data.append()
+        results.append(parseBrewEntry(dep_name, dep_data))
 
     for dep_name, dep_data in data.get("entries", {}).get("cask", {}).items():
         results.append(

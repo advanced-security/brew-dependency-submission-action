@@ -4,7 +4,7 @@ import logging
 import argparse
 
 from bldsa import __name__ as name
-from bldsa.brew import findBrewFiles, parseBrewLock
+from bldsa.brew import parseBrewLock
 from bldsa.dependencies import exportDependencies
 from bldsa.octokit import Octokit
 

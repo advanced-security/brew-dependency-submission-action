@@ -4,7 +4,8 @@ import logging
 import argparse
 
 from bldsa import __name__ as name
-from bldsa.dependencies import Dependency, exportDependencies
+from bldsa.brew import findBrewFiles, parseBrewLock
+from bldsa.dependencies import exportDependencies
 from bldsa.octokit import Octokit
 
 
@@ -27,6 +28,7 @@ parser_github.add_argument(
 parser_github.add_argument(
     "-gi",
     "--github-instance",
+    default=os.environ.get("GITHUB_API_URL", "https://api.github.com"),
     help="GitHub Instance",
 )
 parser_github.add_argument(
@@ -48,60 +50,22 @@ def findBrewFiles(path: str) -> list[str]:
     return results
 
 
-def parseBrewLock(path: str) -> list[Dependency]:
-    """Parse Brewlock files
-
-    https://github.com/package-url/purl-spec/blob/master/PURL-TYPES.rst#other-candidate-types-to-define
-    """
-    if not os.path.exists(path):
-        raise Exception("Brew lock file does not exist")
-
-    results = []
-    with open(path, "r") as handle:
-        lock_data = json.load(handle)
-
-    brew_sys = lock_data.get("system", {})
-    brew_os = "macos" if brew_sys.get("macos") else "deb"
-
-    for dep_name, dep_data in lock_data.get("entries", {}).get("brew", {}).items():
-        # TODO redo these parts
-        # What about taps?
-        if "@" in dep_name:
-            dep_name, _ = dep_name.split("@", 1)
-        dep_name = dep_name.replace("github/bootstrap/", "")
-        dep_name = dep_name.replace("github/packages/", "")
-
-        results.append(
-            Dependency(
-                manager="brew",
-                name=dep_name,
-                version=dep_data.get("version"),
-            )
-        )
-
-    for dep_name, dep_data in lock_data.get("entries", {}).get("cask", {}).items():
-        results.append(
-            Dependency(
-                manager="brew",
-                name=dep_name,
-                version=dep_data.get("version"),
-            )
-        )
-    return results
-
-
 if __name__ == "__main__":
     arguments = parser.parse_args()
 
     logging.basicConfig(
-        level=logging.DEBUG if arguments.debug or os.environ.get("DEBUG") else logging.INFO,
+        level=logging.DEBUG
+        if arguments.debug or os.environ.get("DEBUG")
+        else logging.INFO,
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     )
 
     lock_files = []
 
     owner, repo = arguments.github_repository.split("/", 1)
-    octokit = Octokit(owner, repo, arguments.github_token)
+    octokit = Octokit(
+        owner, repo, arguments.github_token, url=arguments.github_instance
+    )
     logger.info(f"Octokit :: {octokit}")
 
     if arguments.brewlock:

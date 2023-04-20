@@ -13,13 +13,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    matrix:
+      python-version: ["3.9", "3.10", "3.11"]
+
     steps:
     - uses: actions/checkout@v3
 
-    - name: Set up Python 3.11
+    - name: "Set up Python ${{ matrix.python-version }}"
       uses: actions/setup-python@v3
       with:
-        python-version: "3.11"
+        python-version: "${{ matrix.python-version }}"
 
     - name: Install dependencies
       run: |
@@ -36,7 +39,8 @@ jobs:
         GITHUB_TOKEN: ${{ github.token }}
       run: |
         PYTHONPATH=$PWD:$PWD/vendor
-        pipenv run python3 -m bldsa
+        pipenv run python3 -m bldsa \
+          --dry-run
 
   action-test:
     runs-on: ubuntu-latest

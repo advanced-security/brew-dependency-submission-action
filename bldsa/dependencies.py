@@ -23,6 +23,7 @@ class Dependency:
         return self.name
 
     def getPurl(self):
+        # https://github.com/package-url/purl-spec
         result = f"pkg:"
         if self.manager:
             result += f"{self.manager}/"

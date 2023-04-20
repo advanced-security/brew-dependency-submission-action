@@ -2,8 +2,15 @@ from typing import *
 import os
 import requests
 
+
 class Octokit:
-    def __init__(self, owner: str, repo: str, token: str, url=os.environ.get("GITHUB_API_URL")):
+    def __init__(
+        self,
+        owner: str,
+        repo: str,
+        token: str,
+        url=os.environ.get("GITHUB_API_URL", "https://api.github.com"),
+    ):
         self.owner = owner
         self.repo = repo
         self.token = token
@@ -28,6 +35,6 @@ class Octokit:
             raise Exception(
                 f"Failed to submit dependencies: {resp.status_code} {resp.text}"
             )
-    
+
     def __str__(self) -> str:
         return f"Octokit :: [{self.url}]/{self.owner}/{self.repo}"

@@ -26,7 +26,12 @@ jobs:
         python -m pip install --upgrade pip pipenv
         pipenv sync
 
-    - name: Run
+    - name: Run Tests
+      run: |
+        PYTHONPATH=$PWD:$PWD/vendor
+        python -m unittest discover -v -s ./tests -p "test_*.py"
+
+    - name: Run Main
       env:
         GITHUB_TOKEN: ${{ github.token }}
       run: |

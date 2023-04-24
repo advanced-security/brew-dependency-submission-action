@@ -8,14 +8,14 @@ This means thats [GitHub's Dependabot](https://docs.github.com/en/enterprise-clo
 
 ```yaml
 - name: Brew Lockfile Dependency Submission Action
-  uses: advanced-security/brew-dependency-submission-action@v1
+  uses: advanced-security/brew-dependency-submission-action@v1.1
 ```
 
 ### Action Inputs
 
 ```yaml
 - name: Brew Lockfile Dependency Submission Action
-  uses: advanced-security/brew-dependency-submission-action@v1
+  uses: advanced-security/brew-dependency-submission-action@v1.1
   with:
     # [optonal] The path to the Brewfile.lock.json file. Defaults to finding all Brewfile.lock.json in the current
     # working directory

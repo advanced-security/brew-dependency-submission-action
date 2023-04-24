@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-ghastoolkit = "0.1.2"
+ghastoolkit = "*"
 
 [dev-packages]
 black = "*"

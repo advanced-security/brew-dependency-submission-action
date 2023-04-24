@@ -1,15 +1,13 @@
 import os
 import json
 
-from bldsa.dependencies import Dependency
+from ghastoolkit.octokit.dependencygraph import Dependencies, Dependency
 
 
 def parseBrewEntry(name: str, data: dict) -> Dependency:
     """Parse a single Brew entry"""
-    dep = Dependency(
-        manager="brew",
-        version=data.get("version"),
-    )
+    dep_name = ""
+    namespace = None
     # remove version in name
     if "@" in name:
         name, _ = name.split("@", 1)
@@ -17,17 +15,24 @@ def parseBrewEntry(name: str, data: dict) -> Dependency:
     # namespaces in name
     if "/" in name:
         # https://formulae.brew.sh/analytics/install/90d/
-        bspace, btype, name = name.split("/", 2)
+        bspace, btype, dep_name = name.split("/", 2)
 
         if btype in ["tap", "taps", "cask"]:
-            dep.namespace = bspace
+            namespace = bspace
+    else:
+        dep_name = name
 
-    dep.name = name
-    return dep
+    return Dependency(
+        dep_name,
+        namespace=namespace,
+        manager="brew",
+        version=data.get("version"),
+    )
 
 
-def parseBrewJson(data: dict) -> list[Dependency]:
-    results = []
+def parseBrewJson(data: dict) -> Dependencies:
+    results = Dependencies()
+
     brew_sys = data.get("system", {})
     brew_os = "macos" if brew_sys.get("macos") else "deb"
 
@@ -46,7 +51,7 @@ def parseBrewJson(data: dict) -> list[Dependency]:
     return results
 
 
-def parseBrewLock(path: str) -> list[Dependency]:
+def parseBrewLock(path: str) -> Dependencies:
     """Parse Brewlock files
 
     https://github.com/package-url/purl-spec/blob/master/PURL-TYPES.rst#other-candidate-types-to-define

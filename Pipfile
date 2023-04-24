@@ -4,7 +4,12 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-requests = "*"
+ghastoolkit = "*"
 
 [dev-packages]
 black = "*"
+
+[scripts]
+test = "python -m unittest discover -v -s ./tests -p 'test_*.py'"
+fmt = "black ./bldsa"
+lint = "black --check ./bldsa"

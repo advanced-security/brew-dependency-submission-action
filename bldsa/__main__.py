@@ -1,16 +1,17 @@
-import os
 import json
+import os
 import logging
 import argparse
 
-from bldsa import __name__ as name
+from ghastoolkit.octokit.github import GitHub
+from ghastoolkit.octokit.dependencygraph import DependencyGraph
+
+from bldsa import __name__ as tool_name
 from bldsa.brew import parseBrewLock
-from bldsa.dependencies import exportDependencies
-from bldsa.octokit import Octokit
 
 
-logger = logging.getLogger(name)
-parser = argparse.ArgumentParser(name)
+logger = logging.getLogger(tool_name)
+parser = argparse.ArgumentParser(tool_name)
 
 parser.add_argument("--debug", action="store_true", help="Debug mode")
 parser.add_argument("--dry-run", action="store_true", help="Dry run mode")
@@ -21,15 +22,14 @@ parser.add_argument("-ref", default=os.environ.get("GITHUB_REF"), help="Commit r
 
 parser_github = parser.add_argument_group("GitHub")
 parser_github.add_argument(
-    "-gr",
+    "-r",
     "--github-repository",
     default=os.environ.get("GITHUB_REPOSITORY"),
     help="GitHub Repository",
 )
 parser_github.add_argument(
-    "-gi",
     "--github-instance",
-    default=os.environ.get("GITHUB_API_URL", "https://api.github.com"),
+    default=os.environ.get("GITHUB_SERVER_URL", "https://github.com"),
     help="GitHub Instance",
 )
 parser_github.add_argument(
@@ -63,11 +63,16 @@ if __name__ == "__main__":
 
     lock_files = []
 
-    owner, repo = arguments.github_repository.split("/", 1)
-    octokit = Octokit(
-        owner, repo, arguments.github_token, url=arguments.github_instance
+    GitHub.init(
+        repository=arguments.github_repository,
+        token=arguments.github_token,
+        instance=arguments.github_instance,
     )
-    logger.info(f"Octokit :: {octokit}")
+    if not GitHub.repository:
+        raise Exception("Repository not set")
+
+    depgraph = DependencyGraph(GitHub.repository)
+    logger.debug(f"GitHub Instance :: {GitHub}")
 
     if arguments.brewlock:
         lock_files.append(arguments.brewlock)
@@ -78,17 +83,24 @@ if __name__ == "__main__":
         logger.info(f"Lockfile found :: {lockfile}")
 
         dependencies = parseBrewLock(lockfile)
+
         logger.debug(f"Dependencies Count :: {len(dependencies)}")
 
-        bom = exportDependencies(
-            lockfile, dependencies, sha=arguments.sha, ref=arguments.ref
-        )
-        logger.info("Generated BOM...")
-
         if not arguments.dry_run:
-            octokit.submitDependencies(bom)
+            depgraph.submitDependencies(
+                dependencies, tool_name, lockfile, sha=arguments.sha, ref=arguments.ref
+            )
+
             logger.info("Submitted BOM!")
         else:
             logger.info("Dry run mode, skipping submission")
+            print(
+                json.dumps(
+                    dependencies.exportBOM(
+                        tool_name, lockfile, sha=arguments.sha, ref=arguments.ref
+                    ),
+                    indent=2,
+                )
+            )
 
     logger.info("Done")

@@ -105,11 +105,11 @@
         },
         "ghastoolkit": {
             "hashes": [
-                "sha256:4581f84e044419609636a05a5fbc37992921f8f4a8461ff1921927e83eb1c562",
-                "sha256:aaa530b532b2b9f3443aee2690976c2befc9134772569cde39d62fd18736358f"
+                "sha256:00d1679f9a4b6e561f7e40a5f6fc66efa92a4ce03268de4bca7e47972f902aa5",
+                "sha256:de2a181f0c1fcd1a0d096980ce12f18432383162a75e1de8f61b5f1c7ae5cfff"
             ],
             "index": "pypi",
-            "version": "==0.1.4"
+            "version": "==0.2.4"
         },
         "idna": {
             "hashes": [
@@ -165,12 +165,18 @@
             "markers": "python_version >= '3.6'",
             "version": "==6.0"
         },
+        "ratelimit": {
+            "hashes": [
+                "sha256:af8a9b64b821529aca09ebaf6d8d279100d766f19e90b5059ac6a718ca6dee42"
+            ],
+            "version": "==2.2.1"
+        },
         "requests": {
             "hashes": [
                 "sha256:64299f4909223da747622c030b781c0d7811e359c37124b4bd368fb8c6518baa",
                 "sha256:98b1b2782e3c6c4904938b84c0eb932721069dfdb9134313beff7c83c2df24bf"
             ],
-            "markers": "python_version >= '3.7' and python_version < '4'",
+            "markers": "python_version < '4' and python_full_version >= '3.7.0'",
             "version": "==2.28.2"
         },
         "urllib3": {
@@ -248,11 +254,11 @@
         },
         "platformdirs": {
             "hashes": [
-                "sha256:d5b638ca397f25f979350ff789db335903d7ea010ab28903f57b27e1b16c2b08",
-                "sha256:ebe11c0d7a805086e99506aa331612429a72ca7cd52a1f0d277dc4adc20cb10e"
+                "sha256:47692bc24c1958e8b0f13dd727307cff1db103fca36399f457da8e05f222fdc4",
+                "sha256:7954a68d0ba23558d753f73437c55f89027cf8f5108c19844d4b82e5af396335"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==3.2.0"
+            "version": "==3.5.0"
         }
     }
 }

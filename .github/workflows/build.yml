@@ -22,13 +22,12 @@ jobs:
   vendoring:
     uses: advanced-security/reusable-workflows/.github/workflows/python-vendor.yml@v0.2.0
     needs: [testing]
-    if: ${{ inputs.vendor == 'true' }}
     secrets: inherit
 
   # Release a new version of the package
   release:
     uses: advanced-security/reusable-workflows/.github/workflows/python-release.yml@v0.2.0
-    needs: [testing, linting]
+    needs: [testing]
     secrets: inherit
 
   action-test:

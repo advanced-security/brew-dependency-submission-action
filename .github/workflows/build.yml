@@ -20,9 +20,12 @@ jobs:
 
   # Vendor the dependencies into the repository if needed
   vendoring:
-    uses: advanced-security/reusable-workflows/.github/workflows/python-vendor.yml@v0.2.0
+    uses: advanced-security/reusable-workflows/.github/workflows/python-vendor.yml@main
     needs: [testing]
     secrets: inherit
+    permissions:
+      contents: write
+      pull-requests: write
 
   # Release a new version of the package
   release:

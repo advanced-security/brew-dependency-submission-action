@@ -10,13 +10,29 @@ permissions:
   contents: write
 
 jobs:
-  build:
-    uses: advanced-security/reusable-workflows/.github/workflows/python.yml@main
+  # Run the tests on all supported versions of Python
+  testing:
+    uses: advanced-security/reusable-workflows/.github/workflows/python-testing.yml@v0.2.0
+    secrets: inherit
+    with:
+      versions: "3.9,3.10,3.11,3.12"
+
+  # Vendor the dependencies into the repository if needed
+  vendoring:
+    uses: advanced-security/reusable-workflows/.github/workflows/python-vendor.yml@v0.2.0
+    needs: [testing]
+    if: ${{ inputs.vendor == 'true' }}
+    secrets: inherit
+
+  # Release a new version of the package
+  release:
+    uses: advanced-security/reusable-workflows/.github/workflows/python-release.yml@v0.2.0
+    needs: [testing, linting]
     secrets: inherit
 
   action-test:
     runs-on: ubuntu-latest
-    needs: build
+    needs: [testing]
 
     steps:
       - uses: actions/checkout@v4

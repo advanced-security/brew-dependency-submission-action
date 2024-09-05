@@ -13,3 +13,5 @@ black = "*"
 test = "python -m unittest discover -v -s ./tests -p 'test_*.py'"
 fmt = "black ./bldsa"
 lint = "black --check ./bldsa"
+
+vendor = "./vendor/update.sh"

@@ -16,11 +16,11 @@ jobs:
     uses: advanced-security/reusable-workflows/.github/workflows/python-testing.yml@v0.2.0
     secrets: inherit
     with:
-      versions: "3.9,3.10,3.11,3.12"
+      versions: "3.9,3.10,3.11,3.12,3.13"
 
   # Vendor the dependencies into the repository if needed
   vendoring:
-    uses: advanced-security/reusable-workflows/.github/workflows/python-vendor.yml@main
+    uses: advanced-security/reusable-workflows/.github/workflows/python-vendor.yml@v0.2.0
     needs: [testing]
     secrets: inherit
     permissions:

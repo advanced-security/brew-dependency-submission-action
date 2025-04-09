@@ -1,0 +1,11 @@
+[project]
+name = "brew-dependency-submission-action"
+version = "0.1.2"
+description = "This is the Brew / Homebrew Dependency Submission Action which parses Homebrew files and submits the dependencies to the Dependency Graph Submission API."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.12"
+dependencies = ["ghastoolkit>=0.15.1"]
+
+[dependency-groups]
+dev = ["black>=25.1.0"]

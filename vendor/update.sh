@@ -13,22 +13,24 @@ if [ -f $PWD/Pipfile ]; then
     pipenv run pip freeze > "$VENDOR/requirements.txt"
     pip install -r "$VENDOR/requirements.txt" --target=$VENDOR --upgrade
 
-    echo "[+] Clean up vendor folder"
-    rm -rf $VENDOR/*dist-info && \
-        rm -rf $VENDOR/requirements.txt
-
 elif [ -f $PWD/requirements.txt ]; then
     echo "[+] Install all dependencies (pip -> requirements)"
     pip install -r $PWD/requirements.txt --target=$VENDOR
 
-    echo "[+] Clean up vendor folder"
-    rm -rf $VENDOR/*dist-info && \
-        rm -rf $VENDOR/requirements.txt
+elif [ -f $PWD/uv.lock ]; then
+    echo "[+] Install all dependencies (uv -> requirements)"
+ 
+    uv pip freeze > "$VENDOR/requirements.txt"
+    pip install -r "$VENDOR/requirements.txt" --target=$VENDOR --upgrade
 
 else 
     echo "[!] Unsupported Python installer, please update the 'vendor/update.sh' script"
     exit 1
 fi
 
-echo "[+] Completed vendor update"
 
+echo "[+] Clean up vendor folder"
+rm -rf $VENDOR/*dist-info && \
+    rm -rf $VENDOR/requirements.txt
+
+echo "[+] Completed vendor update"

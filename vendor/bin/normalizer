@@ -1,4 +1,4 @@
-#!/home/geekmasher/.local/share/virtualenvs/brew-dependency-submission-action-Gz_oAmoD/bin/python
+#!/home/runner/.local/share/virtualenvs/brew-dependency-submission-action-XUqNX2Tu/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

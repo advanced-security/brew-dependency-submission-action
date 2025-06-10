@@ -13,14 +13,15 @@ permissions:
 jobs:
   # Run the tests on all supported versions of Python
   testing:
-    uses: advanced-security/reusable-workflows/.github/workflows/python-testing.yml@v0.2.0
+    uses: advanced-security/reusable-workflows/.github/workflows/python-testing.yml@main
     secrets: inherit
     with:
-      versions: "3.9,3.10,3.11,3.12"
+      versions: "3.10,3.11,3.12,3.13"
 
   # Vendor the dependencies into the repository if needed
   vendoring:
     uses: advanced-security/reusable-workflows/.github/workflows/python-vendor.yml@main
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     needs: [testing]
     secrets: inherit
     permissions:
@@ -30,12 +31,14 @@ jobs:
   # Release a new version of the package
   release:
     uses: advanced-security/reusable-workflows/.github/workflows/python-release.yml@v0.2.0
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     needs: [testing]
     secrets: inherit
 
   action-test:
     runs-on: ubuntu-latest
     needs: [testing]
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
 
     steps:
       - uses: actions/checkout@v4

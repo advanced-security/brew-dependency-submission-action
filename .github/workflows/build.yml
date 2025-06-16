@@ -30,7 +30,7 @@ jobs:
 
   # Release a new version of the package
   release:
-    uses: advanced-security/reusable-workflows/.github/workflows/python-release.yml@v0.2.0
+    uses: advanced-security/reusable-workflows/.github/workflows/python-release.yml@v0.3.0
     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     needs: [testing]
     secrets: inherit

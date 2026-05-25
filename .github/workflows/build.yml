@@ -30,7 +30,7 @@ jobs:
 
   # Release a new version of the package
   release:
-    uses: advanced-security/reusable-workflows/.github/workflows/python-release.yml@v0.3.0
+    uses: advanced-security/reusable-workflows/.github/workflows/python-release.yml@v0.3.4
     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     needs: [testing]
     secrets: inherit
@@ -41,7 +41,7 @@ jobs:
     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Run action
         uses: ./
         with:
